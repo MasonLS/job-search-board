@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Job Seach Board",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "An organizer for those in search of employment",
+    "description": "The description of the application"
+  }
+}
