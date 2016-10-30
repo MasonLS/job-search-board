@@ -1,8 +1,8 @@
 'use strict';
 
-function fileConfig (fileName: string) {
+function fileConfig (fileName) {
   return {
-    devtool: 'eval-source-map',
+    devtool: 'cheap-module-source-map',
     entry:  __dirname + `/app/${fileName}`,
     output: {
       path: __dirname + "/public",

@@ -1,0 +1,12 @@
+.root {
+  width: 400px;
+}
+
+.input {
+  padding: 0;
+  width: 200px;
+  display: inline-block;
+  .slider {
+    width: 200px;
+  }
+}

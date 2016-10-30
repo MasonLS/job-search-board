@@ -14,8 +14,11 @@
     ]
   },
   "permissions": [
+    "activeTab",
     "tabs",
-    "storage"
+    "storage",
+    "http://*/",
+    "https://*/"
   ],
   "options_ui": {
     "page": "options.html",
@@ -26,7 +29,6 @@
       "19": "images/icon-19.png",
       "38": "images/icon-38.png"
     },
-    "default_title": "Job Seach Board",
-    "default_popup": "popup.html"
+    "default_title": "Job Seach Board"
   }
 }
