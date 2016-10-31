@@ -31,7 +31,8 @@ function fileConfig (fileName) {
 const files = [
   'background.js',
   'options.js',
-  'popup.js'
+  'sidebar.js',
+  'job-board.js'
 ]
 
 module.exports = files.map(fileConfig);
