@@ -54,59 +54,11 @@
 
 	var _root2 = _interopRequireDefault(_root);
 
-	var _actions = __webpack_require__(67);
-
-	var _lodash = __webpack_require__(68);
+	var _lodash = __webpack_require__(67);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var store = (0, _redux.createStore)(_root2.default);
-
-	(0, _reactChromeRedux.wrapStore)(store, { portName: 'MY_APP' });
-
-	// chrome.runtime.onStartup.addListener(() => {
-
-	// chrome.storage.sync.get('state', items => {
-	//   if (items.store) {
-	//     store.dispatch(syncState(items.state));
-	//   }
-	// });
-
-	// });
-
-	// chrome.runtime.onSuspend.addListener(() => {
-	//   chrome.storage.sync.set({ state: store.getState() });
-	// });
-
-	var tabsWithSidebars = [];
-
-	chrome.browserAction.onClicked.addListener(function (tab) {
-
-	  chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
-	    if (changeInfo.status === 'complete') {
-	      _lodash2.default.pull(tabsWithSidebars, tabId);
-	    }
-	  });
-
-	  if (!tabsWithSidebars.includes(tab.id)) {
-	    tabsWithSidebars.push(tab.id);
-	    chrome.tabs.executeScript(null, { file: './public/sidebar.js' }, function () {
-	      chrome.tabs.sendMessage(tab.id, { message: 'toggle sidebar' });
-	    });
-	  } else {
-	    chrome.tabs.sendMessage(tab.id, { message: 'toggle sidebar' });
-	  }
-	});
-
-	// chrome.runtime.onInstalled.addListener(details => {
-	//   console.log('previousVersion', details.previousVersion);
-	// });
-	//
-	// chrome.browserAction.setBadgeText({text: '\'Allo'});
-	//
-	// console.log('\'Allo \'Allo! Event Page for Browser Action');
 
 /***/ },
 /* 1 */
@@ -2963,32 +2915,6 @@
 
 /***/ },
 /* 67 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var SYNC_STATE = 'SYNC_STORE';
-
-	var syncState = exports.syncState = function syncState(state) {
-	  return {
-	    type: SYNC_STATE,
-	    state: state
-	  };
-	};
-
-	var TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
-
-	var toggleSidebar = exports.toggleSidebar = function toggleSidebar() {
-	  return {
-	    type: TOGGLE_SIDEBAR
-	  };
-		};
-
-/***/ },
-/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**

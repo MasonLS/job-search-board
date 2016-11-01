@@ -1,5 +1,5 @@
 .root {
-  width: 400px;
+  width: 420px;
 }
 
 .input {
@@ -9,4 +9,14 @@
   .slider {
     width: 200px;
   }
+}
+
+.button {
+  width: 100%;
+}
+
+.row {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 0;
 }

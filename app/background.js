@@ -4,12 +4,7 @@
 import { createStore } from 'redux';
 import { wrapStore } from 'react-chrome-redux';
 import rootReducer from './reducers/root';
-import { syncState, toggleSidebar } from './actions';
 import _ from 'lodash';
-
-const store = createStore(rootReducer);
-
-wrapStore(store, { portName: 'MY_APP' });
 
 // chrome.runtime.onStartup.addListener(() => {
 
@@ -25,26 +20,26 @@ wrapStore(store, { portName: 'MY_APP' });
 //   chrome.storage.sync.set({ state: store.getState() });
 // });
 
-const tabsWithSidebars = [];
+// const tabsWithSidebars = [];
+//
+// chrome.browserAction.onClicked.addListener(tab => {
+//
+//   chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+//       if (changeInfo.status === 'complete') {
+//         _.pull(tabsWithSidebars, tabId);
+//       }
+//   });
 
-chrome.browserAction.onClicked.addListener(tab => {
-
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-      if (changeInfo.status === 'complete') {
-        _.pull(tabsWithSidebars, tabId);
-      }
-  });
-
-  if (!tabsWithSidebars.includes(tab.id)) {
-    tabsWithSidebars.push(tab.id);
-    chrome.tabs.executeScript(null, { file: './public/sidebar.js' }, () => {
-      chrome.tabs.sendMessage(tab.id, { message: 'toggle sidebar' });
-    });
-  } else {
-    chrome.tabs.sendMessage(tab.id, { message: 'toggle sidebar' });
-  }
-
-});
+//   if (!tabsWithSidebars.includes(tab.id)) {
+//     tabsWithSidebars.push(tab.id);
+//     chrome.tabs.executeScript(null, { file: './public/sidebar.js' }, () => {
+//       chrome.tabs.sendMessage(tab.id, { message: 'toggle sidebar' });
+//     });
+//   } else {
+//     chrome.tabs.sendMessage(tab.id, { message: 'toggle sidebar' });
+//   }
+//
+// });
 
 // chrome.runtime.onInstalled.addListener(details => {
 //   console.log('previousVersion', details.previousVersion);

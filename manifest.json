@@ -29,6 +29,7 @@
       "19": "images/icon-19.png",
       "38": "images/icon-38.png"
     },
-    "default_title": "Job Seach Board"
+    "default_title": "Job Seach Board",
+    "default_popup": "popup.html"
   }
 }
