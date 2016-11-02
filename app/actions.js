@@ -18,3 +18,20 @@ export const toggleSidebar = () => (
     type: TOGGLE_SIDEBAR
   }
 );
+
+const UPDATE_NEW_JOB = 'UPDATE_NEW_JOB';
+
+export const updateNewJob = (updatedField: Object) => (
+  {
+    type: UPDATE_NEW_JOB,
+    updatedField
+  }
+);
+
+const ADD_NEW_JOB = 'ADD_NEW_JOB';
+
+export const addNewJob = () => (
+  {
+    type: ADD_NEW_JOB
+  }
+);

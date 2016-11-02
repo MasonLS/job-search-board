@@ -4,7 +4,9 @@
 import { createStore } from 'redux';
 import { wrapStore } from 'react-chrome-redux';
 import rootReducer from './reducers/root';
-import _ from 'lodash';
+
+const store = createStore(rootReducer);
+wrapStore(store, {portName: 'MY_APP'});
 
 // chrome.runtime.onStartup.addListener(() => {
 
