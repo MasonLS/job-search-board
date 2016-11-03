@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 
 export default ({
+  newJob,
   handleSubmit,
   handleCompanyChange,
   handlePositionChange
@@ -14,12 +15,12 @@ export default ({
       <div className="row row">
         <div className="input-field col s5">
           <i className="material-icons prefix">domain</i>
-          <input className="validate" type="text" tabIndex="-1" onChange={handleCompanyChange} />
+          <input className="validate" type="text" tabIndex="-1" onChange={handleCompanyChange} value={newJob.company} />
           <label>Company</label>
         </div>
         <div className="input-field col s5">
           <i className="material-icons prefix">person_outline</i>
-          <input className="validate" type="text" tabIndex="-1" onChange={handlePositionChange}/>
+          <input className="validate" type="text" tabIndex="-1" onChange={handlePositionChange} value={newJob.position} />
           <label>Position</label>
         </div>
         <div className="input-field col s2 add-btn">

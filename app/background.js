@@ -8,6 +8,7 @@ import rootReducer from './reducers/root';
 const store = createStore(rootReducer);
 wrapStore(store, {portName: 'MY_APP'});
 
+
 // chrome.runtime.onStartup.addListener(() => {
 
   // chrome.storage.sync.get('state', items => {

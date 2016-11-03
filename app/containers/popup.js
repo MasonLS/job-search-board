@@ -7,7 +7,13 @@ import Popup from '../components/popup/popup';
 import { updateNewJob, addNewJob } from '../actions';
 
 
-const mapDispatchToProps = (dispatch, ownProps) => (
+const mapStateToProps = state => (
+  {
+    newJob: state.newJob
+  }
+);
+
+const mapDispatchToProps = dispatch => (
   {
     handleCompanyChange: e => {
       dispatch(updateNewJob({company: e.target.value}));
@@ -21,4 +27,4 @@ const mapDispatchToProps = (dispatch, ownProps) => (
   }
 );
 
-export default connect(null, mapDispatchToProps)(Popup);
+export default connect(mapStateToProps, mapDispatchToProps)(Popup);
