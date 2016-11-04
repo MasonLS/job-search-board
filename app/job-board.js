@@ -4,15 +4,18 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import { Store } from 'react-chrome-redux';
+import JobBoard from './containers/job-board';
 
-import rootReducer from './reducers/root';
-import { syncState } from './actions';
-
-const store = createStore(rootReducer);
-
-chrome.storage.sync.get('state', items => {
-  if (items.store) {
-    store.dispatch(syncState(items.state));
-  }
+const store = new Store({
+  portName: 'MY_APP'
 });
+
+
+ReactDOM.render(
+  <Provider store={store}>
+    <JobBoard />
+  </Provider>,
+  document.getElementById('root')
+);

@@ -35,3 +35,30 @@ export const addNewJob = () => (
     type: ADD_NEW_JOB
   }
 );
+
+const OPEN_JOB_BOARD = 'OPEN_JOB_BOARD';
+
+export const openJobBoard = () => (
+  {
+    type: OPEN_JOB_BOARD
+  }
+);
+
+const NEW_COLUMN = 'NEW_COLUMN';
+
+export const newColumn = (columnName, persist: Boolean) => (
+  {
+    type: NEW_COLUMN,
+    columnName,
+    persist
+  }
+);
+
+const DELETE_COLUMN = 'DELETE_COLUMN';
+
+export const deleteColumn = columnName => (
+  {
+    type: DELETE_COLUMN,
+    columnName
+  }
+);

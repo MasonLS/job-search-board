@@ -62,22 +62,10 @@
 
 	var _popup2 = _interopRequireDefault(_popup);
 
-	var _redux = __webpack_require__(230);
-
-	var _root = __webpack_require__(248);
-
-	var _root2 = _interopRequireDefault(_root);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// const store = new Store({
-	//   portName: 'MY_APP'
-	// });
-
-	var store = (0, _redux.createStore)(_root2.default);
-
-	store.subscribe(function () {
-	  console.log(store.getState());
+	var store = new _reactChromeRedux.Store({
+	  portName: 'MY_APP'
 	});
 
 	_reactDom2.default.render(_react2.default.createElement(
@@ -24828,7 +24816,7 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    newJob: state.newJob
+	    newJob: state.newJob || {}
 	  };
 	};
 
@@ -24842,6 +24830,11 @@
 	    },
 	    handleSubmit: function handleSubmit(newJob) {
 	      dispatch((0, _actions.addNewJob)());
+	    },
+	    openJobBoard: function openJobBoard() {
+	      chrome.tabs.create({
+	        url: './job-board.html'
+	      });
 	    }
 	  };
 	};
@@ -24866,6 +24859,7 @@
 
 	exports.default = function (_ref) {
 	  var newJob = _ref.newJob,
+	      openJobBoard = _ref.openJobBoard,
 	      handleSubmit = _ref.handleSubmit,
 	      handleCompanyChange = _ref.handleCompanyChange,
 	      handlePositionChange = _ref.handlePositionChange;
@@ -24877,7 +24871,7 @@
 	      { className: 'container' },
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'row row' },
+	        { className: 'row' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'input-field col s5' },
@@ -24910,7 +24904,7 @@
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'input-field col s2 add-btn' },
+	          { className: 'input-field col s2', id: 'add-btn' },
 	          _react2.default.createElement(
 	            'a',
 	            { className: 'btn-floating waves-effect waves-light white', onClick: handleSubmit },
@@ -24918,6 +24912,24 @@
 	              'i',
 	              { className: 'material-icons' },
 	              'add'
+	            )
+	          )
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement('div', { className: 'col s10' }),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'input-field col s2', id: 'board-btn' },
+	          _react2.default.createElement(
+	            'a',
+	            { className: 'btn-floating waves-effect waves-light white', onClick: openJobBoard },
+	            _react2.default.createElement(
+	              'i',
+	              { className: 'material-icons' },
+	              'dashboard'
 	            )
 	          )
 	        )
@@ -24967,83 +24979,33 @@
 	  return {
 	    type: ADD_NEW_JOB
 	  };
-		};
-
-/***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _newJob = __webpack_require__(249);
-
-	var _newJob2 = _interopRequireDefault(_newJob);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var initialState = {
-	  jobs: [],
-	  newJob: new _newJob2.default({ url: '', company: '', position: '' })
 	};
 
-	exports.default = function () {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-	  var action = arguments[1];
+	var OPEN_JOB_BOARD = 'OPEN_JOB_BOARD';
 
-	  switch (action.type) {
-	    case 'SYNC_STATE':
-	      return _extends({}, state, action.state);
-	    case 'UPDATE_NEW_JOB':
-	      return _extends({}, state, {
-	        newJob: _extends({}, state.newJob, action.updatedField)
-	      });
-	    case 'ADD_NEW_JOB':
-	      return (0, _newJob.addNewJob)(state);
-	    default:
-	      return state;
-	  }
-		};
-
-/***/ },
-/* 249 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Job = function Job(_ref) {
-	  var url = _ref.url,
-	      company = _ref.company,
-	      position = _ref.position;
-
-	  _classCallCheck(this, Job);
-
-	  this.url = url;
-	  this.company = company;
-	  this.position = position;
+	var openJobBoard = exports.openJobBoard = function openJobBoard() {
+	  return {
+	    type: OPEN_JOB_BOARD
+	  };
 	};
 
-	exports.default = Job;
-	var addNewJob = exports.addNewJob = function addNewJob(state) {
-	  var jobs = state.jobs.slice();
-	  jobs.push(state.newJob);
-	  return _extends({}, state, {
-	    jobs: jobs,
-	    newJob: new Job({ url: '', company: '', position: '' })
-	  });
+	var NEW_COLUMN = 'NEW_COLUMN';
+
+	var newColumn = exports.newColumn = function newColumn(columnName, persist) {
+	  return {
+	    type: NEW_COLUMN,
+	    columnName: columnName,
+	    persist: persist
+	  };
+	};
+
+	var DELETE_COLUMN = 'DELETE_COLUMN';
+
+	var deleteColumn = exports.deleteColumn = function deleteColumn(columnName) {
+	  return {
+	    type: DELETE_COLUMN,
+	    columnName: columnName
+	  };
 		};
 
 /***/ }

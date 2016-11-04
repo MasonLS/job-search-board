@@ -2,11 +2,15 @@
 
 'use strict';
 
-import Job, { addNewJob } from './new-job';
+import { addNewJob } from './new-job';
+import newColumn from './new-column';
+import update from 'react-addons-update';
 
 const initialState = {
   jobs: [],
-  newJob: new Job({url: '', company: '', position: ''})
+  newJob: {url: '', company: '', position: '', column: 'backlog'},
+  columns: ['backlog'],
+  newColumn: ''
 }
 
 export default (state = initialState, action) => {
@@ -26,6 +30,14 @@ export default (state = initialState, action) => {
       };
     case 'ADD_NEW_JOB':
       return addNewJob(state);
+    case 'NEW_COLUMN':
+      return newColumn(state, action);
+    case 'DELETE_COLUMN':
+      let columnIndex = state.columns.indexOf(action.columnName);
+      return {
+        ...state,
+        columns: update(state.columns, {$splice: [[columnIndex, 1]]})
+      }
     default:
       return state;
   }

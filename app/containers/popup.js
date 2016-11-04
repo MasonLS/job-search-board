@@ -6,10 +6,9 @@ import { connect } from 'react-redux';
 import Popup from '../components/popup/popup';
 import { updateNewJob, addNewJob } from '../actions';
 
-
 const mapStateToProps = state => (
   {
-    newJob: state.newJob
+    newJob: state.newJob || {}
   }
 );
 
@@ -23,6 +22,11 @@ const mapDispatchToProps = dispatch => (
     },
     handleSubmit: newJob => {
       dispatch(addNewJob());
+    },
+    openJobBoard: () => {
+      chrome.tabs.create({
+        url: './job-board.html'
+      });
     }
   }
 );
