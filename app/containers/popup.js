@@ -14,11 +14,8 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = dispatch => (
   {
-    handleCompanyChange: e => {
-      dispatch(updateNewJob({company: e.target.value}));
-    },
-    handlePositionChange: e => {
-      dispatch(updateNewJob({position: e.target.value}));
+    handleUpdate: (field, value) => {
+      dispatch(updateNewJob(field, value));
     },
     handleSubmit: newJob => {
       dispatch(addNewJob());

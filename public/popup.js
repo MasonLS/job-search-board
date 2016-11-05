@@ -24830,11 +24830,8 @@
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    handleCompanyChange: function handleCompanyChange(e) {
-	      dispatch((0, _actions.updateNewJob)({ company: e.target.value }));
-	    },
-	    handlePositionChange: function handlePositionChange(e) {
-	      dispatch((0, _actions.updateNewJob)({ position: e.target.value }));
+	    handleUpdate: function handleUpdate(field, value) {
+	      dispatch((0, _actions.updateNewJob)(field, value));
 	    },
 	    handleSubmit: function handleSubmit(newJob) {
 	      dispatch((0, _actions.addNewJob)());
@@ -24868,9 +24865,8 @@
 	exports.default = function (_ref) {
 	  var newJob = _ref.newJob,
 	      openJobBoard = _ref.openJobBoard,
-	      handleSubmit = _ref.handleSubmit,
-	      handleCompanyChange = _ref.handleCompanyChange,
-	      handlePositionChange = _ref.handlePositionChange;
+	      handleUpdate = _ref.handleUpdate,
+	      handleSubmit = _ref.handleSubmit;
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'root' },
@@ -24888,7 +24884,9 @@
 	            { className: 'material-icons prefix' },
 	            'domain'
 	          ),
-	          _react2.default.createElement('input', { className: 'validate', type: 'text', tabIndex: '-1', onChange: handleCompanyChange, value: newJob.company }),
+	          _react2.default.createElement('input', { className: 'validate', type: 'text', tabIndex: '-1', onChange: function onChange(e) {
+	              return handleUpdate('company', e.target.value);
+	            }, value: newJob.company }),
 	          _react2.default.createElement(
 	            'label',
 	            null,
@@ -24903,7 +24901,9 @@
 	            { className: 'material-icons prefix' },
 	            'person_outline'
 	          ),
-	          _react2.default.createElement('input', { className: 'validate', type: 'text', tabIndex: '-1', onChange: handlePositionChange, value: newJob.position }),
+	          _react2.default.createElement('input', { className: 'validate', type: 'text', tabIndex: '-1', onChange: function onChange(e) {
+	              return handleUpdate('position', e.target.value);
+	            }, value: newJob.position }),
 	          _react2.default.createElement(
 	            'label',
 	            null,
@@ -24927,7 +24927,78 @@
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'row' },
-	        _react2.default.createElement('div', { className: 'col s10' }),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'input-field col s5' },
+	          _react2.default.createElement('textarea', { className: 'materialize-textarea', tabIndex: '-1', onChange: function onChange(e) {
+	              return handleUpdate('notes', e.target.value);
+	            }, value: newJob.notes }),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Notes'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'input-field col s5' },
+	          _react2.default.createElement(
+	            'select',
+	            { className: 'browser-default', onChange: function onChange(e) {
+	                return handleUpdate('interest', e.target.value);
+	              }, value: newJob.interest },
+	            _react2.default.createElement(
+	              'option',
+	              { value: '1' },
+	              '1'
+	            ),
+	            _react2.default.createElement(
+	              'option',
+	              { value: '2' },
+	              '2'
+	            ),
+	            _react2.default.createElement(
+	              'option',
+	              { value: '3' },
+	              '3'
+	            ),
+	            _react2.default.createElement(
+	              'option',
+	              { value: '4' },
+	              '4'
+	            ),
+	            _react2.default.createElement(
+	              'option',
+	              { value: '5' },
+	              '5'
+	            ),
+	            _react2.default.createElement(
+	              'option',
+	              { value: '6' },
+	              '6'
+	            ),
+	            _react2.default.createElement(
+	              'option',
+	              { value: '7' },
+	              '7'
+	            ),
+	            _react2.default.createElement(
+	              'option',
+	              { value: '8' },
+	              '8'
+	            ),
+	            _react2.default.createElement(
+	              'option',
+	              { value: '9' },
+	              '9'
+	            ),
+	            _react2.default.createElement(
+	              'option',
+	              { value: '10' },
+	              '10'
+	            )
+	          )
+	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'input-field col s2', id: 'board-btn' },
@@ -24974,10 +25045,11 @@
 
 	var UPDATE_NEW_JOB = 'UPDATE_NEW_JOB';
 
-	var updateNewJob = exports.updateNewJob = function updateNewJob(updatedField) {
+	var updateNewJob = exports.updateNewJob = function updateNewJob(field, value) {
 	  return {
 	    type: UPDATE_NEW_JOB,
-	    updatedField: updatedField
+	    field: field,
+	    value: value
 	  };
 	};
 
@@ -25019,20 +25091,20 @@
 
 	var NEW_COLUMN = 'NEW_COLUMN';
 
-	var newColumn = exports.newColumn = function newColumn(columnName, persist) {
+	var newColumn = exports.newColumn = function newColumn(column, persist) {
 	  return {
 	    type: NEW_COLUMN,
-	    columnName: columnName,
+	    column: column,
 	    persist: persist
 	  };
 	};
 
 	var DELETE_COLUMN = 'DELETE_COLUMN';
 
-	var deleteColumn = exports.deleteColumn = function deleteColumn(columnName) {
+	var deleteColumn = exports.deleteColumn = function deleteColumn(column) {
 	  return {
 	    type: DELETE_COLUMN,
-	    columnName: columnName
+	    column: column
 	  };
 		};
 

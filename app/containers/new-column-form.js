@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => (
     updateNewColumn: (e) => {
       dispatch(newColumn(e.target.value, false));
     },
-    addColumn: columnName => {
+    addColumn: column => {
       dispatch(newColumn(null, true));
     }
   }

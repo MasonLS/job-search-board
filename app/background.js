@@ -20,7 +20,7 @@ chrome.storage.sync.get('state', items => {
 
   store.subscribe(() => {
     let state = store.getState();
-    chrome.storage.sync.set({ state })
+    chrome.storage.sync.set({ state });
   });
 });
 
@@ -36,6 +36,8 @@ chrome.tabs.onActivated.addListener(activeInfo => {
     currentTabUrl = tab.url;
     console.log(currentTabUrl);
   });
+
+  store.dispatch({type: 'RESET_NEW_JOB'});
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {

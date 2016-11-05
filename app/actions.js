@@ -21,10 +21,11 @@ export const toggleSidebar = () => (
 
 const UPDATE_NEW_JOB = 'UPDATE_NEW_JOB';
 
-export const updateNewJob = (updatedField: Object) => (
+export const updateNewJob = (field, value) => (
   {
     type: UPDATE_NEW_JOB,
-    updatedField
+    field,
+    value
   }
 );
 
@@ -66,19 +67,19 @@ export const openJobBoard = () => (
 
 const NEW_COLUMN = 'NEW_COLUMN';
 
-export const newColumn = (columnName, persist: Boolean) => (
+export const newColumn = (column, persist: Boolean) => (
   {
     type: NEW_COLUMN,
-    columnName,
+    column,
     persist
   }
 );
 
 const DELETE_COLUMN = 'DELETE_COLUMN';
 
-export const deleteColumn = columnName => (
+export const deleteColumn = column => (
   {
     type: DELETE_COLUMN,
-    columnName
+    column
   }
 );
