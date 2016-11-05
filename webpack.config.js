@@ -31,7 +31,7 @@ function fileConfig (fileName) {
 const files = [
   'background.js',
   'options.js',
-  'sidebar.js',
+  'popup.js',
   'job-board.js'
 ]
 
