@@ -3,17 +3,53 @@
 'use strict';
 
 import React from 'react';
+import { DragSource } from 'react-dnd';
 
-export default ({ job }) => (
-  <div className="card horizontal">
-    <div className="card-content">
-      <span className="card-title">{job.company}</span>
-        <p>I am a very simple card. I am good at containing small bits of information.
-        I am convenient because I require little markup to use effectively.</p>
-      </div>
-    <div className="card-action">
-      <a href="#">This is a link</a>
-      <a href="#">This is a link</a>
-    </div>
-  </div>
+const jobCardSpec = {
+  beginDrag(props) {
+    return props.job;
+  }
+}
+
+const collect = (connect, monitor) => (
+  {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  }
 );
+
+class JobCard extends React.Component {
+
+  render () {
+    const {
+      job,
+      deleteJob,
+      openLinkInNewTab,
+      connectDragSource,
+      isDragging
+    } = this.props;
+
+    const opacity = isDragging ? 1 : 1;
+
+    const style = {
+      opacity: opacity
+    };
+
+    return (
+      connectDragSource(
+        <div className="card" style={style}>
+          <div className="card-content">
+            <span className="card-title">{job.company}</span>
+            <span className="card-title">{job.position}</span>
+            </div>
+          <div className="card-action">
+            <a href="#" onClick={openLinkInNewTab}>Link</a>
+            <a href="#" onClick={deleteJob}>Delete</a>
+          </div>
+        </div>
+      )
+    )
+  }
+}
+
+export default DragSource('job', jobCardSpec, collect)(JobCard);

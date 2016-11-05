@@ -36,6 +36,26 @@ export const addNewJob = () => (
   }
 );
 
+const UPDATE_JOB = 'UPDATE_JOB';
+
+export const updateJob = (url, field, value) => (
+  {
+    type: UPDATE_JOB,
+    url,
+    field,
+    value
+  }
+);
+
+const DELETE_JOB = 'DELETE_JOB';
+
+export const deleteJob = url => (
+  {
+    type: DELETE_JOB,
+    url
+  }
+);
+
 const OPEN_JOB_BOARD = 'OPEN_JOB_BOARD';
 
 export const openJobBoard = () => (

@@ -62,10 +62,18 @@
 
 	var _popup2 = _interopRequireDefault(_popup);
 
+	var _actions = __webpack_require__(247);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var store = new _reactChromeRedux.Store({
 	  portName: 'MY_APP'
+	});
+
+	//politely request active tab's url from background.js and store it
+
+	chrome.runtime.sendMessage({ message: 'url please' }, function (response) {
+	  store.dispatch((0, _actions.updateNewJob)({ url: response.url }));
 	});
 
 	_reactDom2.default.render(_react2.default.createElement(
@@ -24978,6 +24986,26 @@
 	var addNewJob = exports.addNewJob = function addNewJob() {
 	  return {
 	    type: ADD_NEW_JOB
+	  };
+	};
+
+	var UPDATE_JOB = 'UPDATE_JOB';
+
+	var updateJob = exports.updateJob = function updateJob(url, field, value) {
+	  return {
+	    type: UPDATE_JOB,
+	    url: url,
+	    field: field,
+	    value: value
+	  };
+	};
+
+	var DELETE_JOB = 'DELETE_JOB';
+
+	var deleteJob = exports.deleteJob = function deleteJob(url) {
+	  return {
+	    type: DELETE_JOB,
+	    url: url
 	  };
 	};
 

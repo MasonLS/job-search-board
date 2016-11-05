@@ -56,11 +56,50 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var store = (0, _redux.createStore)(_root2.default);
-	store.subscribe(function () {
-	  console.log(store.getState());
+	var store = void 0;
+
+	//check if there is store saved in storage
+
+	chrome.storage.sync.get('state', function (items) {
+	  if (items.state) {
+	    store = (0, _redux.createStore)(_root2.default, items.state);
+	  } else {
+	    store = (0, _redux.createStore)(_root2.default);
+	  }
+	  (0, _reactChromeRedux.wrapStore)(store, { portName: 'MY_APP' });
+
+	  store.subscribe(function () {
+	    var state = store.getState();
+	    chrome.storage.sync.set({ state: state });
+	  });
 	});
-	(0, _reactChromeRedux.wrapStore)(store, { portName: 'MY_APP' });
+
+	//keep track of current tab and it's url
+	//to attach to job when new one is created
+	var currentTabUrl = void 0;
+	var currentTabId = void 0;
+
+	chrome.tabs.onActivated.addListener(function (activeInfo) {
+	  currentTabId = activeInfo.tabId;
+
+	  chrome.tabs.get(currentTabId, function (tab) {
+	    currentTabUrl = tab.url;
+	    console.log(currentTabUrl);
+	  });
+	});
+
+	chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
+	  if (tabId === currentTabId && changeInfo.url) {
+	    currentTabUrl = changeInfo.url;
+	    console.log(currentTabUrl);
+	  }
+	});
+
+	chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+	  if (request.message === 'url please') {
+	    sendResponse({ url: currentTabUrl });
+	  }
+	});
 
 /***/ },
 /* 1 */
@@ -2899,15 +2938,17 @@
 	  value: true
 	});
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _newJob = __webpack_require__(67);
 
-	var _newColumn = __webpack_require__(74);
+	var _newColumn = __webpack_require__(68);
 
 	var _newColumn2 = _interopRequireDefault(_newColumn);
 
-	var _reactAddonsUpdate = __webpack_require__(68);
+	var _reactAddonsUpdate = __webpack_require__(69);
 
 	var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
 
@@ -2924,25 +2965,66 @@
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	  var action = arguments[1];
 
-	  switch (action.type) {
-	    case 'SYNC_STATE':
-	      return _extends({}, state, action.state);
-	    case 'UPDATE_NEW_JOB':
-	      return _extends({}, state, {
-	        newJob: _extends({}, state.newJob, action.updatedField)
-	      });
-	    case 'ADD_NEW_JOB':
-	      return (0, _newJob.addNewJob)(state);
-	    case 'NEW_COLUMN':
-	      return (0, _newColumn2.default)(state, action);
-	    case 'DELETE_COLUMN':
-	      var columnIndex = state.columns.indexOf(action.columnName);
-	      return _extends({}, state, {
-	        columns: (0, _reactAddonsUpdate2.default)(state.columns, { $splice: [[columnIndex, 1]] })
-	      });
-	    default:
-	      return state;
-	  }
+	  var _ret = function () {
+	    switch (action.type) {
+	      case 'SYNC_STATE':
+	        return {
+	          v: _extends({}, state, action.state)
+	        };
+	      case 'UPDATE_NEW_JOB':
+	        return {
+	          v: _extends({}, state, {
+	            newJob: _extends({}, state.newJob, action.updatedField)
+	          })
+	        };
+	      case 'ADD_NEW_JOB':
+	        return {
+	          v: (0, _newJob.addNewJob)(state)
+	        };
+	      case 'UPDATE_JOB':
+	        var url = action.url,
+	            field = action.field,
+	            value = action.value;
+
+	        var jobToUpdate = state.jobs.find(function (job) {
+	          return job.url === url;
+	        });
+	        if (field) {
+	          jobToUpdate[field] = value;
+	          return {
+	            v: _extends({}, state)
+	          };
+	        } else return {
+	            v: state
+	          };
+	      case 'DELETE_JOB':
+	        var jobIndex = state.jobs.find(function (job) {
+	          return job.url === action.url;
+	        });
+	        return {
+	          v: _extends({}, state, {
+	            jobs: (0, _reactAddonsUpdate2.default)(state.jobs, { $splice: [[jobIndex, 1]] })
+	          })
+	        };
+	      case 'NEW_COLUMN':
+	        return {
+	          v: (0, _newColumn2.default)(state, action)
+	        };
+	      case 'DELETE_COLUMN':
+	        var columnIndex = state.columns.indexOf(action.columnName);
+	        return {
+	          v: _extends({}, state, {
+	            columns: (0, _reactAddonsUpdate2.default)(state.columns, { $splice: [[columnIndex, 1]] })
+	          })
+	        };
+	      default:
+	        return {
+	          v: state
+	        };
+	    }
+	  }();
+
+	  if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 		};
 
 /***/ },
@@ -2975,10 +3057,43 @@
 /* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(69);
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _reactAddonsUpdate = __webpack_require__(69);
+
+	var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (state, _ref) {
+	  var columnName = _ref.columnName,
+	      persist = _ref.persist;
+
+	  if (persist && state.columns.length < 5) {
+	    return _extends({}, state, {
+	      columns: (0, _reactAddonsUpdate2.default)(state.columns, { $push: [state.newColumn] }),
+	      newColumn: ''
+	    });
+	  }
+	  return _extends({}, state, {
+	    newColumn: columnName
+	  });
+		};
 
 /***/ },
 /* 69 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(70);
+
+/***/ },
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -2996,11 +3111,11 @@
 
 	'use strict';
 
-	var _prodInvariant = __webpack_require__(70),
-	    _assign = __webpack_require__(71);
+	var _prodInvariant = __webpack_require__(71),
+	    _assign = __webpack_require__(72);
 
-	var keyOf = __webpack_require__(72);
-	var invariant = __webpack_require__(73);
+	var keyOf = __webpack_require__(73);
+	var invariant = __webpack_require__(74);
 	var hasOwnProperty = {}.hasOwnProperty;
 
 	function shallowCopy(x) {
@@ -3097,7 +3212,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports) {
 
 	/**
@@ -3141,7 +3256,7 @@
 	module.exports = reactProdInvariant;
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3230,7 +3345,7 @@
 
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3269,7 +3384,7 @@
 	module.exports = keyOf;
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -3322,39 +3437,6 @@
 
 	module.exports = invariant;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
-
-/***/ },
-/* 74 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _reactAddonsUpdate = __webpack_require__(68);
-
-	var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = function (state, _ref) {
-	  var columnName = _ref.columnName,
-	      persist = _ref.persist;
-
-	  if (persist && state.columns.length < 5) {
-	    return _extends({}, state, {
-	      columns: (0, _reactAddonsUpdate2.default)(state.columns, { $push: [state.newColumn] }),
-	      newColumn: ''
-	    });
-	  }
-	  return _extends({}, state, {
-	    newColumn: columnName
-	  });
-		};
 
 /***/ }
 /******/ ]);
