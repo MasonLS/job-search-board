@@ -86,6 +86,8 @@
 	    currentTabUrl = tab.url;
 	    console.log(currentTabUrl);
 	  });
+
+	  store.dispatch({ type: 'RESET_NEW_JOB' });
 	});
 
 	chrome.tabs.onUpdated.addListener(function (tabId, changeInfo) {
@@ -2956,7 +2958,7 @@
 
 	var initialState = {
 	  jobs: [],
-	  newJob: { url: '', company: '', position: '', column: 'backlog' },
+	  newJob: { url: '', company: '', position: '', interest: '', notes: '', column: 'backlog' },
 	  columns: ['backlog'],
 	  newColumn: ''
 	};
@@ -2972,14 +2974,21 @@
 	          v: _extends({}, state, action.state)
 	        };
 	      case 'UPDATE_NEW_JOB':
+	        if (action.field) {
+	          state.newJob[action.field] = action.value;
+	        }
 	        return {
-	          v: _extends({}, state, {
-	            newJob: _extends({}, state.newJob, action.updatedField)
-	          })
+	          v: _extends({}, state)
 	        };
 	      case 'ADD_NEW_JOB':
 	        return {
 	          v: (0, _newJob.addNewJob)(state)
+	        };
+	      case 'RESET_NEW_JOB':
+	        return {
+	          v: _extends({}, state, {
+	            newJob: { url: '', company: '', position: '', interest: '', notes: '', column: 'backlog' }
+	          })
 	        };
 	      case 'UPDATE_JOB':
 	        var url = action.url,
@@ -3011,7 +3020,10 @@
 	          v: (0, _newColumn2.default)(state, action)
 	        };
 	      case 'DELETE_COLUMN':
-	        var columnIndex = state.columns.indexOf(action.columnName);
+	        state.jobs.forEach(function (job) {
+	          return job.column = 'backlog';
+	        });
+	        var columnIndex = state.columns.indexOf(action.column);
 	        return {
 	          v: _extends({}, state, {
 	            columns: (0, _reactAddonsUpdate2.default)(state.columns, { $splice: [[columnIndex, 1]] })
@@ -3048,6 +3060,8 @@
 	      url: '',
 	      company: '',
 	      position: '',
+	      interest: '1',
+	      notes: '',
 	      column: 'backlog'
 	    }
 	  });
@@ -3072,7 +3086,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = function (state, _ref) {
-	  var columnName = _ref.columnName,
+	  var column = _ref.column,
 	      persist = _ref.persist;
 
 	  if (persist && state.columns.length < 5) {
@@ -3082,7 +3096,7 @@
 	    });
 	  }
 	  return _extends({}, state, {
-	    newColumn: columnName
+	    newColumn: column
 	  });
 		};
 

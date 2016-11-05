@@ -41,7 +41,8 @@ class JobCard extends React.Component {
           <div className="card-content">
             <span className="card-title">{job.company}</span>
             <span className="card-title">{job.position}</span>
-            </div>
+            <p>{job.notes}</p>
+          </div>
           <div className="card-action">
             <a href="#" onClick={openLinkInNewTab}>Link</a>
             <a href="#" onClick={deleteJob}>Delete</a>

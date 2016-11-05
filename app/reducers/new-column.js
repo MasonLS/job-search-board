@@ -6,7 +6,7 @@ import update from 'react-addons-update';
 
 export default (
   state,
-  { columnName, persist }
+  { column, persist }
 ) => {
   if (persist && state.columns.length < 5) {
     return {
@@ -17,6 +17,6 @@ export default (
   }
   return {
     ...state,
-    newColumn: columnName
+    newColumn: column
   }
 }

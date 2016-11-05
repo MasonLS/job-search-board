@@ -12,6 +12,8 @@ export const addNewJob = state => {
       url: '',
       company: '',
       position: '',
+      interest: '1',
+      notes: '',
       column: 'backlog'
     }
   }
