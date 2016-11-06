@@ -62,18 +62,10 @@
 
 	var _popup2 = _interopRequireDefault(_popup);
 
-	var _actions = __webpack_require__(247);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var store = new _reactChromeRedux.Store({
 	  portName: 'MY_APP'
-	});
-
-	//politely request active tab's url from background.js and store it
-
-	chrome.runtime.sendMessage({ message: 'url please' }, function (response) {
-	  store.dispatch((0, _actions.updateNewJob)({ url: response.url }));
 	});
 
 	_reactDom2.default.render(_react2.default.createElement(
@@ -24818,28 +24810,23 @@
 
 	var _popup2 = _interopRequireDefault(_popup);
 
-	var _actions = __webpack_require__(247);
+	var _creators = __webpack_require__(248);
+
+	var _creators2 = _interopRequireDefault(_creators);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    newJob: state.newJob || {}
+	    url: state.url
 	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    handleUpdate: function handleUpdate(field, value) {
-	      dispatch((0, _actions.updateNewJob)(field, value));
-	    },
-	    handleSubmit: function handleSubmit(newJob) {
-	      dispatch((0, _actions.addNewJob)());
-	    },
-	    openJobBoard: function openJobBoard() {
-	      chrome.tabs.create({
-	        url: './job-board.html'
-	      });
+	    addJob: function addJob(job, url) {
+	      job.url = url;
+	      dispatch(_creators2.default.jobs.add(job));
 	    }
 	  };
 	};
@@ -24856,169 +24843,303 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _creators = __webpack_require__(248);
+
+	var _creators2 = _interopRequireDefault(_creators);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = function (_ref) {
-	  var newJob = _ref.newJob,
-	      openJobBoard = _ref.openJobBoard,
-	      handleUpdate = _ref.handleUpdate,
-	      handleSubmit = _ref.handleSubmit;
-	  return _react2.default.createElement(
-	    'div',
-	    { className: 'root' },
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'container' },
-	      _react2.default.createElement(
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Job = function Job() {
+	  return {
+	    company: '',
+	    position: '',
+	    notes: '',
+	    interest: ''
+	  };
+	};
+
+	var Popup = function (_React$Component) {
+	  _inherits(Popup, _React$Component);
+
+	  function Popup() {
+	    _classCallCheck(this, Popup);
+
+	    var _this = _possibleConstructorReturn(this, (Popup.__proto__ || Object.getPrototypeOf(Popup)).apply(this, arguments));
+
+	    _this.state = {
+	      newJob: Job()
+	    };
+	    return _this;
+	  }
+
+	  _createClass(Popup, [{
+	    key: 'handleUpdate',
+	    value: function handleUpdate(updatedInfo) {
+	      this.setState({
+	        newJob: _extends({}, this.state.newJob, updatedInfo)
+	      });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit() {
+	      this.props.addJob(this.state.newJob, this.props.url);
+	      this.setState({
+	        newJob: Job()
+	      });
+	    }
+	  }, {
+	    key: 'openJobBoard',
+	    value: function openJobBoard() {
+	      chrome.tabs.create({
+	        url: './job-board.html'
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'root' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'input-field col s5' },
+	          { className: 'container' },
 	          _react2.default.createElement(
-	            'i',
-	            { className: 'material-icons prefix' },
-	            'domain'
-	          ),
-	          _react2.default.createElement('input', { className: 'validate', type: 'text', tabIndex: '-1', onChange: function onChange(e) {
-	              return handleUpdate('company', e.target.value);
-	            }, value: newJob.company }),
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            'Company'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'input-field col s5' },
-	          _react2.default.createElement(
-	            'i',
-	            { className: 'material-icons prefix' },
-	            'person_outline'
-	          ),
-	          _react2.default.createElement('input', { className: 'validate', type: 'text', tabIndex: '-1', onChange: function onChange(e) {
-	              return handleUpdate('position', e.target.value);
-	            }, value: newJob.position }),
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            'Position'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'input-field col s2', id: 'add-btn' },
-	          _react2.default.createElement(
-	            'a',
-	            { className: 'btn-floating waves-effect waves-light white', onClick: handleSubmit },
+	            'div',
+	            { className: 'row' },
 	            _react2.default.createElement(
-	              'i',
-	              { className: 'material-icons' },
-	              'add'
+	              'div',
+	              { className: 'input-field col s5' },
+	              _react2.default.createElement(
+	                'i',
+	                { className: 'material-icons prefix' },
+	                'domain'
+	              ),
+	              _react2.default.createElement('input', { className: 'validate', type: 'text', tabIndex: '-1', onChange: function onChange(e) {
+	                  return _this2.handleUpdate({ 'company': e.target.value });
+	                }, value: this.state.newJob.company }),
+	              _react2.default.createElement(
+	                'label',
+	                null,
+	                'Company'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'input-field col s5' },
+	              _react2.default.createElement(
+	                'i',
+	                { className: 'material-icons prefix' },
+	                'person_outline'
+	              ),
+	              _react2.default.createElement('input', { className: 'validate', type: 'text', tabIndex: '-1', onChange: function onChange(e) {
+	                  return _this2.handleUpdate({ 'position': e.target.value });
+	                }, value: this.state.newJob.position }),
+	              _react2.default.createElement(
+	                'label',
+	                null,
+	                'Position'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'input-field col s2', id: 'add-btn' },
+	              _react2.default.createElement(
+	                'a',
+	                { className: 'btn-floating waves-effect waves-light white', onClick: this.handleSubmit.bind(this) },
+	                _react2.default.createElement(
+	                  'i',
+	                  { className: 'material-icons' },
+	                  'add'
+	                )
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'row' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'input-field col s5' },
+	              _react2.default.createElement('textarea', { className: 'materialize-textarea', tabIndex: '-1', onChange: function onChange(e) {
+	                  return _this2.handleUpdate({ 'notes': e.target.value });
+	                }, value: this.state.newJob.notes }),
+	              _react2.default.createElement(
+	                'label',
+	                null,
+	                'Notes'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'input-field col s5' },
+	              _react2.default.createElement(
+	                'select',
+	                { className: 'browser-default', tabIndex: '-1', onChange: function onChange(e) {
+	                    return handleUpdate({ 'interest': e.target.value });
+	                  }, value: this.state.newJob.interest },
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: '1' },
+	                  '1'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: '2' },
+	                  '2'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: '3' },
+	                  '3'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: '4' },
+	                  '4'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: '5' },
+	                  '5'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: '6' },
+	                  '6'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: '7' },
+	                  '7'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: '8' },
+	                  '8'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: '9' },
+	                  '9'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: '10' },
+	                  '10'
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'input-field col s2', id: 'board-btn' },
+	              _react2.default.createElement(
+	                'a',
+	                { className: 'btn-floating waves-effect waves-light white', onClick: this.openJobBoard },
+	                _react2.default.createElement(
+	                  'i',
+	                  { className: 'material-icons' },
+	                  'dashboard'
+	                )
+	              )
 	            )
 	          )
 	        )
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'row' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'input-field col s5' },
-	          _react2.default.createElement('textarea', { className: 'materialize-textarea', tabIndex: '-1', onChange: function onChange(e) {
-	              return handleUpdate('notes', e.target.value);
-	            }, value: newJob.notes }),
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            'Notes'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'input-field col s5' },
-	          _react2.default.createElement(
-	            'select',
-	            { className: 'browser-default', onChange: function onChange(e) {
-	                return handleUpdate('interest', e.target.value);
-	              }, value: newJob.interest },
-	            _react2.default.createElement(
-	              'option',
-	              { value: '1' },
-	              '1'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              { value: '2' },
-	              '2'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              { value: '3' },
-	              '3'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              { value: '4' },
-	              '4'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              { value: '5' },
-	              '5'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              { value: '6' },
-	              '6'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              { value: '7' },
-	              '7'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              { value: '8' },
-	              '8'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              { value: '9' },
-	              '9'
-	            ),
-	            _react2.default.createElement(
-	              'option',
-	              { value: '10' },
-	              '10'
-	            )
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'input-field col s2', id: 'board-btn' },
-	          _react2.default.createElement(
-	            'a',
-	            { className: 'btn-floating waves-effect waves-light white', onClick: openJobBoard },
-	            _react2.default.createElement(
-	              'i',
-	              { className: 'material-icons' },
-	              'dashboard'
-	            )
-	          )
-	        )
-	      )
-	    )
-	  );
+	      );
+	    }
+	  }]);
+
+	  return Popup;
+	}(_react2.default.Component);
+
+		exports.default = Popup;
+
+/***/ },
+/* 247 */,
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _types = __webpack_require__(249);
+
+	var _types2 = _interopRequireDefault(_types);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+
+	  setUrl: function setUrl(url) {
+	    return {
+	      type: _types2.default.SET_URL,
+	      url: url
+	    };
+	  },
+
+	  jobs: {
+
+	    add: function add(job) {
+	      return {
+	        type: _types2.default.jobs.ADD,
+	        job: job
+	      };
+	    },
+
+	    update: function update(url, info) {
+	      return {
+	        type: _types2.default.jobs.UPDATE,
+	        url: url,
+	        info: info
+	      };
+	    },
+
+	    delete: function _delete(url) {
+	      return {
+	        type: _types2.default.jobs.DELETE,
+	        url: url
+	      };
+	    }
+	  },
+
+	  columns: {
+
+	    add: function add(column) {
+	      return {
+	        type: _types2.default.columns.ADD,
+	        column: column
+	      };
+	    },
+
+	    delete: function _delete(column) {
+	      return {
+	        type: _types2.default.columns.DELETE,
+	        column: column
+	      };
+	    }
+	  }
 		};
 
 /***/ },
-/* 247 */
+/* 249 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25026,86 +25147,21 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var SYNC_STATE = 'SYNC_STORE';
+	exports.default = {
 
-	var syncState = exports.syncState = function syncState(state) {
-	  return {
-	    type: SYNC_STATE,
-	    state: state
-	  };
-	};
+	  SET_URL: 'SET_URL',
 
-	var TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
+	  jobs: {
+	    ADD: 'ADD_JOB',
+	    UPDATE: 'UPDATE_JOB',
+	    DELETE: 'DELETE_JOB'
+	  },
 
-	var toggleSidebar = exports.toggleSidebar = function toggleSidebar() {
-	  return {
-	    type: TOGGLE_SIDEBAR
-	  };
-	};
+	  columns: {
+	    ADD: 'ADD_COLUMN',
+	    DELETE: 'DELETE_COLUMN'
+	  }
 
-	var UPDATE_NEW_JOB = 'UPDATE_NEW_JOB';
-
-	var updateNewJob = exports.updateNewJob = function updateNewJob(field, value) {
-	  return {
-	    type: UPDATE_NEW_JOB,
-	    field: field,
-	    value: value
-	  };
-	};
-
-	var ADD_NEW_JOB = 'ADD_NEW_JOB';
-
-	var addNewJob = exports.addNewJob = function addNewJob() {
-	  return {
-	    type: ADD_NEW_JOB
-	  };
-	};
-
-	var UPDATE_JOB = 'UPDATE_JOB';
-
-	var updateJob = exports.updateJob = function updateJob(url, field, value) {
-	  return {
-	    type: UPDATE_JOB,
-	    url: url,
-	    field: field,
-	    value: value
-	  };
-	};
-
-	var DELETE_JOB = 'DELETE_JOB';
-
-	var deleteJob = exports.deleteJob = function deleteJob(url) {
-	  return {
-	    type: DELETE_JOB,
-	    url: url
-	  };
-	};
-
-	var OPEN_JOB_BOARD = 'OPEN_JOB_BOARD';
-
-	var openJobBoard = exports.openJobBoard = function openJobBoard() {
-	  return {
-	    type: OPEN_JOB_BOARD
-	  };
-	};
-
-	var NEW_COLUMN = 'NEW_COLUMN';
-
-	var newColumn = exports.newColumn = function newColumn(column, persist) {
-	  return {
-	    type: NEW_COLUMN,
-	    column: column,
-	    persist: persist
-	  };
-	};
-
-	var DELETE_COLUMN = 'DELETE_COLUMN';
-
-	var deleteColumn = exports.deleteColumn = function deleteColumn(column) {
-	  return {
-	    type: DELETE_COLUMN,
-	    column: column
-	  };
 		};
 
 /***/ }

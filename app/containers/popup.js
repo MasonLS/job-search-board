@@ -4,26 +4,19 @@
 
 import { connect } from 'react-redux';
 import Popup from '../components/popup/popup';
-import { updateNewJob, addNewJob } from '../actions';
+import actionCreators from '../actions/creators';
 
 const mapStateToProps = state => (
   {
-    newJob: state.newJob || {}
+    url: state.url
   }
 );
 
 const mapDispatchToProps = dispatch => (
   {
-    handleUpdate: (field, value) => {
-      dispatch(updateNewJob(field, value));
-    },
-    handleSubmit: newJob => {
-      dispatch(addNewJob());
-    },
-    openJobBoard: () => {
-      chrome.tabs.create({
-        url: './job-board.html'
-      });
+    addJob: (job: Object, url: String) => {
+      job.url = url;
+      dispatch(actionCreators.jobs.add(job));
     }
   }
 );
