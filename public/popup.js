@@ -24810,7 +24810,7 @@
 
 	var _popup2 = _interopRequireDefault(_popup);
 
-	var _creators = __webpack_require__(248);
+	var _creators = __webpack_require__(247);
 
 	var _creators2 = _interopRequireDefault(_creators);
 
@@ -24851,7 +24851,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _creators = __webpack_require__(248);
+	var _creators = __webpack_require__(247);
 
 	var _creators2 = _interopRequireDefault(_creators);
 
@@ -24868,7 +24868,8 @@
 	    company: '',
 	    position: '',
 	    notes: '',
-	    interest: ''
+	    interest: '',
+	    column: 'backlog'
 	  };
 	};
 
@@ -24991,7 +24992,7 @@
 	              _react2.default.createElement(
 	                'select',
 	                { className: 'browser-default', tabIndex: '-1', onChange: function onChange(e) {
-	                    return handleUpdate({ 'interest': e.target.value });
+	                    return _this2.handleUpdate({ 'interest': e.target.value });
 	                  }, value: this.state.newJob.interest },
 	                _react2.default.createElement(
 	                  'option',
@@ -25070,8 +25071,7 @@
 		exports.default = Popup;
 
 /***/ },
-/* 247 */,
-/* 248 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25080,7 +25080,7 @@
 	  value: true
 	});
 
-	var _types = __webpack_require__(249);
+	var _types = __webpack_require__(248);
 
 	var _types2 = _interopRequireDefault(_types);
 
@@ -25139,7 +25139,7 @@
 		};
 
 /***/ },
-/* 249 */
+/* 248 */
 /***/ function(module, exports) {
 
 	'use strict';

@@ -24901,7 +24901,9 @@
 
 	var _reactRedux = __webpack_require__(172);
 
-	var _actions = __webpack_require__(248);
+	var _creators = __webpack_require__(366);
+
+	var _creators2 = _interopRequireDefault(_creators);
 
 	var _jobColumn = __webpack_require__(249);
 
@@ -24927,8 +24929,11 @@
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    deleteColumn: function deleteColumn(column) {
-	      return dispatch((0, _actions.deleteColumn)(column));
+	    deleteColumn: function deleteColumn(column, jobs) {
+	      jobs.forEach(function (job) {
+	        dispatch(_creators2.default.jobs.update(job.url, { column: 'backlog' }));
+	      });
+	      dispatch(_creators2.default.columns.delete(column));
 	    }
 	  };
 	};
@@ -24936,97 +24941,7 @@
 		exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_jobColumn2.default);
 
 /***/ },
-/* 248 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var SYNC_STATE = 'SYNC_STORE';
-
-	var syncState = exports.syncState = function syncState(state) {
-	  return {
-	    type: SYNC_STATE,
-	    state: state
-	  };
-	};
-
-	var TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
-
-	var toggleSidebar = exports.toggleSidebar = function toggleSidebar() {
-	  return {
-	    type: TOGGLE_SIDEBAR
-	  };
-	};
-
-	var UPDATE_NEW_JOB = 'UPDATE_NEW_JOB';
-
-	var updateNewJob = exports.updateNewJob = function updateNewJob(field, value) {
-	  return {
-	    type: UPDATE_NEW_JOB,
-	    field: field,
-	    value: value
-	  };
-	};
-
-	var ADD_NEW_JOB = 'ADD_NEW_JOB';
-
-	var addNewJob = exports.addNewJob = function addNewJob() {
-	  return {
-	    type: ADD_NEW_JOB
-	  };
-	};
-
-	var UPDATE_JOB = 'UPDATE_JOB';
-
-	var updateJob = exports.updateJob = function updateJob(url, field, value) {
-	  return {
-	    type: UPDATE_JOB,
-	    url: url,
-	    field: field,
-	    value: value
-	  };
-	};
-
-	var DELETE_JOB = 'DELETE_JOB';
-
-	var deleteJob = exports.deleteJob = function deleteJob(url) {
-	  return {
-	    type: DELETE_JOB,
-	    url: url
-	  };
-	};
-
-	var OPEN_JOB_BOARD = 'OPEN_JOB_BOARD';
-
-	var openJobBoard = exports.openJobBoard = function openJobBoard() {
-	  return {
-	    type: OPEN_JOB_BOARD
-	  };
-	};
-
-	var NEW_COLUMN = 'NEW_COLUMN';
-
-	var newColumn = exports.newColumn = function newColumn(column, persist) {
-	  return {
-	    type: NEW_COLUMN,
-	    column: column,
-	    persist: persist
-	  };
-	};
-
-	var DELETE_COLUMN = 'DELETE_COLUMN';
-
-	var deleteColumn = exports.deleteColumn = function deleteColumn(column) {
-	  return {
-	    type: DELETE_COLUMN,
-	    column: column
-	  };
-		};
-
-/***/ },
+/* 248 */,
 /* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -25050,7 +24965,9 @@
 
 	var _reactChromeRedux = __webpack_require__(196);
 
-	var _actions = __webpack_require__(248);
+	var _creators = __webpack_require__(366);
+
+	var _creators2 = _interopRequireDefault(_creators);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25069,7 +24986,8 @@
 	    var _monitor$getItem = monitor.getItem(),
 	        url = _monitor$getItem.url;
 
-	    store.dispatch((0, _actions.updateJob)(url, 'column', column));
+	    console.log(url, column);
+	    store.dispatch(_creators2.default.jobs.update(url, { column: column }));
 	  }
 	};
 
@@ -25093,6 +25011,8 @@
 	  _createClass(JobColumn, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      var _props = this.props,
 	          jobs = _props.jobs,
 	          column = _props.column,
@@ -25125,7 +25045,7 @@
 	            _react2.default.createElement(
 	              'a',
 	              { className: 'btn-floating waves-effect waves-light white', onClick: function onClick() {
-	                  return deleteColumn(column);
+	                  return deleteColumn(column, _this2.props.jobs);
 	                } },
 	              _react2.default.createElement(
 	                'i',
@@ -25167,7 +25087,9 @@
 
 	var _jobCard2 = _interopRequireDefault(_jobCard);
 
-	var _actions = __webpack_require__(248);
+	var _creators = __webpack_require__(366);
+
+	var _creators2 = _interopRequireDefault(_creators);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25177,7 +25099,7 @@
 	      chrome.tabs.create({ url: ownProps.job.url });
 	    },
 	    deleteJob: function deleteJob() {
-	      dispatch((0, _actions.deleteJob)(ownProps.job.url));
+	      dispatch(_creators2.default.jobs.delete(ownProps.job.url));
 	    }
 	  };
 	};
@@ -30175,7 +30097,9 @@
 
 	var _reactRedux = __webpack_require__(172);
 
-	var _actions = __webpack_require__(248);
+	var _creators = __webpack_require__(366);
+
+	var _creators2 = _interopRequireDefault(_creators);
 
 	var _newColumnForm = __webpack_require__(347);
 
@@ -30183,24 +30107,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    newColumn: state.newColumn || ''
-	  };
-	};
-
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    updateNewColumn: function updateNewColumn(e) {
-	      dispatch((0, _actions.newColumn)(e.target.value, false));
-	    },
 	    addColumn: function addColumn(column) {
-	      dispatch((0, _actions.newColumn)(null, true));
+	      dispatch(_creators2.default.columns.add(column));
 	    }
 	  };
 	};
 
-		exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_newColumnForm2.default);
+		exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(_newColumnForm2.default);
 
 /***/ },
 /* 347 */
@@ -30212,47 +30127,106 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = function (_ref) {
-	  var show = _ref.show,
-	      updateNewColumn = _ref.updateNewColumn,
-	      addColumn = _ref.addColumn,
-	      newColumn = _ref.newColumn;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	  if (show) {
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'col s3' },
-	      _react2.default.createElement(
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _class = function (_React$Component) {
+	  _inherits(_class, _React$Component);
+
+	  function _class() {
+	    _classCallCheck(this, _class);
+
+	    var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+
+	    _this.state = {
+	      column: ''
+	    };
+	    return _this;
+	  }
+
+	  _createClass(_class, [{
+	    key: 'handleUpdate',
+	    value: function handleUpdate(e) {
+	      this.setState({ column: e.target.value });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit() {
+	      this.props.addColumn(this.state.column);
+	      this.setState({ column: '' });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'col s3' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col s6 input-field' },
-	          _react2.default.createElement('input', { id: 'column-name', onChange: updateNewColumn, value: newColumn })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col s6' },
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            'a',
-	            { className: 'btn-floating waves-effect waves-light white', onClick: addColumn },
+	            'div',
+	            { className: 'col s6 input-field' },
+	            _react2.default.createElement('input', { id: 'column-name', onChange: this.handleUpdate.bind(this), value: this.state.column })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col s6' },
 	            _react2.default.createElement(
-	              'i',
-	              { className: 'material-icons' },
-	              'add'
+	              'a',
+	              { className: 'btn-floating waves-effect waves-light white', onClick: this.handleSubmit.bind(this) },
+	              _react2.default.createElement(
+	                'i',
+	                { className: 'material-icons' },
+	                'add'
+	              )
 	            )
 	          )
 	        )
-	      )
-	    );
-	  } else return null;
-	};
+	      );
+	    }
+	  }]);
+
+	  return _class;
+	}(_react2.default.Component);
+
+	// export default (
+	//   {
+	//     show,
+	//     updateNewColumn,
+	//     addColumn,
+	//     newColumn
+	//   }
+	// ) => {
+	//   if (show) {
+	//     return (
+	//       <div className="col s3">
+	//         <div className="row">
+	//           <div className="col s6 input-field">
+	//             <input id="column-name" onChange={this.handleUpdate.bind(this)} />
+	//           </div>
+	//           <div className="col s6">
+	//             <a className="btn-floating waves-effect waves-light white" onClick={addColumn}><i className="material-icons">add</i></a>
+	//           </div>
+	//         </div>
+	//       </div>
+	//     );
+	//   } else return null;
+	// };
+
+
+	exports.default = _class;
 
 /***/ },
 /* 348 */
@@ -31657,6 +31631,100 @@
 	}
 
 	module.exports = exports['default'];
+
+/***/ },
+/* 366 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _types = __webpack_require__(367);
+
+	var _types2 = _interopRequireDefault(_types);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+
+	  setUrl: function setUrl(url) {
+	    return {
+	      type: _types2.default.SET_URL,
+	      url: url
+	    };
+	  },
+
+	  jobs: {
+
+	    add: function add(job) {
+	      return {
+	        type: _types2.default.jobs.ADD,
+	        job: job
+	      };
+	    },
+
+	    update: function update(url, info) {
+	      return {
+	        type: _types2.default.jobs.UPDATE,
+	        url: url,
+	        info: info
+	      };
+	    },
+
+	    delete: function _delete(url) {
+	      return {
+	        type: _types2.default.jobs.DELETE,
+	        url: url
+	      };
+	    }
+	  },
+
+	  columns: {
+
+	    add: function add(column) {
+	      return {
+	        type: _types2.default.columns.ADD,
+	        column: column
+	      };
+	    },
+
+	    delete: function _delete(column) {
+	      return {
+	        type: _types2.default.columns.DELETE,
+	        column: column
+	      };
+	    }
+	  }
+		};
+
+/***/ },
+/* 367 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+
+	  SET_URL: 'SET_URL',
+
+	  jobs: {
+	    ADD: 'ADD_JOB',
+	    UPDATE: 'UPDATE_JOB',
+	    DELETE: 'DELETE_JOB'
+	  },
+
+	  columns: {
+	    ADD: 'ADD_COLUMN',
+	    DELETE: 'DELETE_COLUMN'
+	  }
+
+		};
 
 /***/ }
 /******/ ]);

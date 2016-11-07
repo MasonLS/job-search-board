@@ -4,7 +4,7 @@
 
 import actionTypes from '../actions/types';
 
-export default (columns = [], action: Object) => {
+export default (columns = ['backlog'], action: Object) => {
 
   switch(action.type) {
 
@@ -15,11 +15,15 @@ export default (columns = [], action: Object) => {
       ];
 
     case actionTypes.columns.DELETE:
-      const indexOfColumn = columns.indexOf(action.column);
-      columns.splice(indexOfColumn, 1);
-      return [
-        ...columns
-      ];
+      if (action.column !== 'backlog') {
+        const indexOfColumn = columns.indexOf(action.column);
+        columns.splice(indexOfColumn, 1);
+        return [
+          ...columns
+        ];
+      } else {
+        return columns;
+      }
 
     default:
       return columns;

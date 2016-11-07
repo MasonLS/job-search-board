@@ -10,7 +10,8 @@ const Job = () => (
     company: '',
     position: '',
     notes: '',
-    interest: ''
+    interest: '',
+    column: 'backlog'
   }
 );
 
@@ -73,7 +74,7 @@ export default class Popup extends React.Component {
               <label>Notes</label>
             </div>
             <div className="input-field col s5">
-              <select className="browser-default" tabIndex="-1" onChange={(e) => handleUpdate({'interest': e.target.value})} value={this.state.newJob.interest}>
+              <select className="browser-default" tabIndex="-1" onChange={(e) => this.handleUpdate({'interest': e.target.value})} value={this.state.newJob.interest}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>

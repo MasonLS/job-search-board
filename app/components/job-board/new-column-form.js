@@ -5,26 +5,60 @@
 import React from 'react';
 
 
-export default (
-  {
-    show,
-    updateNewColumn,
-    addColumn,
-    newColumn
+export default class extends React.Component {
+  constructor() {
+    super(...arguments);
+    this.state = {
+      column: ''
+    }
   }
-) => {
-  if (show) {
+
+  handleUpdate(e) {
+    this.setState({column: e.target.value});
+  }
+
+  handleSubmit() {
+    this.props.addColumn(this.state.column);
+    this.setState({column: ''});
+  }
+
+  render() {
     return (
       <div className="col s3">
         <div className="row">
           <div className="col s6 input-field">
-            <input id="column-name" onChange={updateNewColumn} value={newColumn} />
+            <input id="column-name" onChange={this.handleUpdate.bind(this)} value={this.state.column}/>
           </div>
           <div className="col s6">
-            <a className="btn-floating waves-effect waves-light white" onClick={addColumn}><i className="material-icons">add</i></a>
+            <a className="btn-floating waves-effect waves-light white" onClick={this.handleSubmit.bind(this)}><i className="material-icons">add</i></a>
           </div>
         </div>
       </div>
     );
-  } else return null;
-};
+  }
+
+}
+
+// export default (
+//   {
+//     show,
+//     updateNewColumn,
+//     addColumn,
+//     newColumn
+//   }
+// ) => {
+//   if (show) {
+//     return (
+//       <div className="col s3">
+//         <div className="row">
+//           <div className="col s6 input-field">
+//             <input id="column-name" onChange={this.handleUpdate.bind(this)} />
+//           </div>
+//           <div className="col s6">
+//             <a className="btn-floating waves-effect waves-light white" onClick={addColumn}><i className="material-icons">add</i></a>
+//           </div>
+//         </div>
+//       </div>
+//     );
+//   } else return null;
+// };

@@ -54,7 +54,7 @@
 
 	var _root2 = _interopRequireDefault(_root);
 
-	var _creators = __webpack_require__(79);
+	var _creators = __webpack_require__(70);
 
 	var _creators2 = _interopRequireDefault(_creators);
 
@@ -2934,17 +2934,17 @@
 	  value: true
 	});
 
-	var _jobs = __webpack_require__(76);
+	var _jobs = __webpack_require__(67);
 
 	var _jobs2 = _interopRequireDefault(_jobs);
 
-	var _columns = __webpack_require__(77);
+	var _columns = __webpack_require__(69);
 
 	var _columns2 = _interopRequireDefault(_columns);
 
 	var _redux = __webpack_require__(1);
 
-	var _types = __webpack_require__(78);
+	var _types = __webpack_require__(68);
 
 	var _types2 = _interopRequireDefault(_types);
 
@@ -2967,16 +2967,7 @@
 		});
 
 /***/ },
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */,
-/* 72 */,
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2987,7 +2978,7 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _types = __webpack_require__(78);
+	var _types = __webpack_require__(68);
 
 	var _types2 = _interopRequireDefault(_types);
 
@@ -3001,7 +2992,7 @@
 	  });
 	};
 
-	var deleteJob = function deleteJob(jobs, url) {
+	var deleteAndReturnJob = function deleteAndReturnJob(jobs, url) {
 	  var indexOfJob = void 0;
 
 	  jobs.forEach(function (job, i) {
@@ -3010,7 +3001,7 @@
 	    }
 	  });
 
-	  jobs.splice(indexOfJob, 1);
+	  return jobs.splice(indexOfJob, 1)[0];
 	};
 
 	exports.default = function () {
@@ -3025,9 +3016,9 @@
 	      return [].concat(_toConsumableArray(jobs));
 
 	    case _types2.default.jobs.UPDATE:
-	      var jobToUpdate = findJob(jobs, action.url);
+	      var jobToUpdate = deleteAndReturnJob(jobs, action.url);
 	      var updatedJob = _extends({}, jobToUpdate, action.info);
-	      return [].concat(_toConsumableArray(jobs));
+	      return [].concat(_toConsumableArray(jobs), [updatedJob]);
 
 	    case _types2.default.jobs.DELETE:
 	      deleteJob(jobs, action.url);
@@ -3039,46 +3030,7 @@
 		};
 
 /***/ },
-/* 77 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _types = __webpack_require__(78);
-
-	var _types2 = _interopRequireDefault(_types);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	exports.default = function () {
-	  var columns = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	  var action = arguments[1];
-
-
-	  switch (action.type) {
-
-	    case _types2.default.columns.ADD:
-	      columns.push(action.column);
-	      return [].concat(_toConsumableArray(columns));
-
-	    case _types2.default.columns.DELETE:
-	      var indexOfColumn = columns.indexOf(action.column);
-	      columns.splice(indexOfColumn, 1);
-	      return [].concat(_toConsumableArray(columns));
-
-	    default:
-	      return columns;
-	  }
-		};
-
-/***/ },
-/* 78 */
+/* 68 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3104,7 +3056,7 @@
 		};
 
 /***/ },
-/* 79 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3113,7 +3065,50 @@
 	  value: true
 	});
 
-	var _types = __webpack_require__(78);
+	var _types = __webpack_require__(68);
+
+	var _types2 = _interopRequireDefault(_types);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	exports.default = function () {
+	  var columns = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['backlog'];
+	  var action = arguments[1];
+
+
+	  switch (action.type) {
+
+	    case _types2.default.columns.ADD:
+	      columns.push(action.column);
+	      return [].concat(_toConsumableArray(columns));
+
+	    case _types2.default.columns.DELETE:
+	      if (action.column !== 'backlog') {
+	        var indexOfColumn = columns.indexOf(action.column);
+	        columns.splice(indexOfColumn, 1);
+	        return [].concat(_toConsumableArray(columns));
+	      } else {
+	        return columns;
+	      }
+
+	    default:
+	      return columns;
+	  }
+		};
+
+/***/ },
+/* 70 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _types = __webpack_require__(68);
 
 	var _types2 = _interopRequireDefault(_types);
 

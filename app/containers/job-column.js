@@ -3,7 +3,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { deleteColumn } from '../actions';
+import actionCreators from '../actions/creators';
 import JobColumn from '../components/job-board/job-column';
 
 const sortAndFilterJobs = (jobs, column) => {
@@ -19,7 +19,12 @@ const mapStateToProps = (state, { column }) => (
 
 const mapDispatchToProps = dispatch => (
   {
-    deleteColumn: column => dispatch(deleteColumn(column))
+    deleteColumn: (column: String, jobs: Array) => {
+      jobs.forEach(job => {
+        dispatch(actionCreators.jobs.update(job.url, {column: 'backlog'}));
+      });
+      dispatch(actionCreators.columns.delete(column));
+    }
   }
 );
 

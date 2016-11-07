@@ -10,7 +10,7 @@ const findJob = (jobs, url) => {
   return jobs.find(job => job.url === url);
 }
 
-const deleteJob = (jobs, url) => {
+const deleteAndReturnJob = (jobs, url) => {
   let indexOfJob;
 
   jobs.forEach((job, i) => {
@@ -19,7 +19,7 @@ const deleteJob = (jobs, url) => {
     }
   });
 
-  jobs.splice(indexOfJob, 1);
+  return jobs.splice(indexOfJob, 1)[0];
 }
 
 export default (jobs = [], action: Object) => {
@@ -33,13 +33,14 @@ export default (jobs = [], action: Object) => {
       ];
 
     case actionTypes.jobs.UPDATE:
-      const jobToUpdate = findJob(jobs, action.url);
+      const jobToUpdate = deleteAndReturnJob(jobs, action.url);
       const updatedJob = {
         ...jobToUpdate,
         ...action.info
       };
       return [
-        ...jobs
+        ...jobs,
+        updatedJob
       ];
 
     case actionTypes.jobs.DELETE:
