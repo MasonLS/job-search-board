@@ -3,27 +3,17 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { newColumn } from '../actions';
+import actionCreators from '../actions/creators';
 import NewColumnForm from '../components/job-board/new-column-form';
-
-
-const mapStateToProps = state => (
-  {
-    newColumn: state.newColumn || ''
-  }
-);
 
 
 const mapDispatchToProps = dispatch => (
   {
-    updateNewColumn: (e) => {
-      dispatch(newColumn(e.target.value, false));
-    },
     addColumn: column => {
-      dispatch(newColumn(null, true));
+      dispatch(actionCreators.columns.add(column));
     }
   }
 );
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewColumnForm);
+export default connect(null, mapDispatchToProps)(NewColumnForm);

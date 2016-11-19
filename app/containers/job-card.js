@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux';
 import JobCard from '../components/job-board/job-card';
-import { deleteJob } from '../actions';
+import actionCreators from '../actions/creators';
 
 
 const mapDispatchToProps = (dispatch, ownProps) => (
@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch, ownProps) => (
       chrome.tabs.create({url: ownProps.job.url});
     },
     deleteJob: () => {
-      dispatch(deleteJob(ownProps.job.url));
+      dispatch(actionCreators.jobs.delete(ownProps.job.url));
     }
   }
 );
