@@ -3021,7 +3021,7 @@
 	      return [].concat(_toConsumableArray(jobs), [updatedJob]);
 
 	    case _types2.default.jobs.DELETE:
-	      deleteJob(jobs, action.url);
+	      deleteAndReturnJob(jobs, action.url);
 	      return [].concat(_toConsumableArray(jobs));
 
 	    default:

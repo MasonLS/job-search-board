@@ -24868,7 +24868,7 @@
 	    company: '',
 	    position: '',
 	    notes: '',
-	    interest: '',
+	    interest: '1',
 	    column: 'backlog'
 	  };
 	};
@@ -24931,7 +24931,7 @@
 	                { className: 'material-icons prefix' },
 	                'domain'
 	              ),
-	              _react2.default.createElement('input', { className: 'validate', type: 'text', tabIndex: '-1', onChange: function onChange(e) {
+	              _react2.default.createElement('input', { className: 'validate', id: 'company', type: 'text', tabIndex: '-1', onChange: function onChange(e) {
 	                  return _this2.handleUpdate({ 'company': e.target.value });
 	                }, value: this.state.newJob.company }),
 	              _react2.default.createElement(
@@ -24948,7 +24948,7 @@
 	                { className: 'material-icons prefix' },
 	                'person_outline'
 	              ),
-	              _react2.default.createElement('input', { className: 'validate', type: 'text', tabIndex: '-1', onChange: function onChange(e) {
+	              _react2.default.createElement('input', { className: 'validate', id: 'position', type: 'text', tabIndex: '-1', onChange: function onChange(e) {
 	                  return _this2.handleUpdate({ 'position': e.target.value });
 	                }, value: this.state.newJob.position }),
 	              _react2.default.createElement(
@@ -24962,7 +24962,7 @@
 	              { className: 'input-field col s2', id: 'add-btn' },
 	              _react2.default.createElement(
 	                'a',
-	                { className: 'btn-floating waves-effect waves-light white', onClick: this.handleSubmit.bind(this) },
+	                { className: 'btn-floating waves-effect waves-light white', id: 'submit', onClick: this.handleSubmit.bind(this) },
 	                _react2.default.createElement(
 	                  'i',
 	                  { className: 'material-icons' },
@@ -24977,7 +24977,7 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'input-field col s5' },
-	              _react2.default.createElement('textarea', { className: 'materialize-textarea', tabIndex: '-1', onChange: function onChange(e) {
+	              _react2.default.createElement('textarea', { className: 'materialize-textarea', id: 'notes', tabIndex: '-1', onChange: function onChange(e) {
 	                  return _this2.handleUpdate({ 'notes': e.target.value });
 	                }, value: this.state.newJob.notes }),
 	              _react2.default.createElement(
@@ -24991,7 +24991,7 @@
 	              { className: 'input-field col s5' },
 	              _react2.default.createElement(
 	                'select',
-	                { className: 'browser-default', tabIndex: '-1', onChange: function onChange(e) {
+	                { className: 'browser-default', id: 'interest', tabIndex: '-1', onChange: function onChange(e) {
 	                    return _this2.handleUpdate({ 'interest': e.target.value });
 	                  }, value: this.state.newJob.interest },
 	                _react2.default.createElement(

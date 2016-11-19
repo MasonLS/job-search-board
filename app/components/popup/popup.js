@@ -10,7 +10,7 @@ const Job = () => (
     company: '',
     position: '',
     notes: '',
-    interest: '',
+    interest: '1',
     column: 'backlog'
   }
 );
@@ -56,25 +56,25 @@ export default class Popup extends React.Component {
           <div className="row">
             <div className="input-field col s5">
               <i className="material-icons prefix">domain</i>
-              <input className="validate" type="text" tabIndex="-1" onChange={(e) => this.handleUpdate({'company': e.target.value})} value={this.state.newJob.company} />
+              <input className="validate" id="company" type="text" tabIndex="-1" onChange={(e) => this.handleUpdate({'company': e.target.value})} value={this.state.newJob.company} />
               <label>Company</label>
             </div>
             <div className="input-field col s5">
               <i className="material-icons prefix">person_outline</i>
-              <input className="validate" type="text" tabIndex="-1" onChange={(e) => this.handleUpdate({'position': e.target.value})} value={this.state.newJob.position} />
+              <input className="validate" id="position" type="text" tabIndex="-1" onChange={(e) => this.handleUpdate({'position': e.target.value})} value={this.state.newJob.position} />
               <label>Position</label>
             </div>
             <div className="input-field col s2" id="add-btn">
-              <a className="btn-floating waves-effect waves-light white" onClick={this.handleSubmit.bind(this)}><i className="material-icons">add</i></a>
+              <a className="btn-floating waves-effect waves-light white" id="submit" onClick={this.handleSubmit.bind(this)}><i className="material-icons">add</i></a>
             </div>
           </div>
           <div className="row">
             <div className="input-field col s5">
-              <textarea className="materialize-textarea" tabIndex="-1" onChange={(e) => this.handleUpdate({'notes': e.target.value})} value={this.state.newJob.notes}></textarea>
+              <textarea className="materialize-textarea" id="notes" tabIndex="-1" onChange={(e) => this.handleUpdate({'notes': e.target.value})} value={this.state.newJob.notes}></textarea>
               <label>Notes</label>
             </div>
             <div className="input-field col s5">
-              <select className="browser-default" tabIndex="-1" onChange={(e) => this.handleUpdate({'interest': e.target.value})} value={this.state.newJob.interest}>
+              <select className="browser-default" id="interest" tabIndex="-1" onChange={(e) => this.handleUpdate({'interest': e.target.value})} value={this.state.newJob.interest}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>

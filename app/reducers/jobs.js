@@ -44,7 +44,7 @@ export default (jobs = [], action: Object) => {
       ];
 
     case actionTypes.jobs.DELETE:
-      deleteJob(jobs, action.url);
+      deleteAndReturnJob(jobs, action.url);
       return [
         ...jobs
       ];
